@@ -6,10 +6,13 @@ PYPACKAGE = btrfs_file_history
 LIBDIR    = $(DESTDIR)$(PREFIX)/lib/$(PKGNAME)
 BINDIR    = $(DESTDIR)$(PREFIX)/bin
 
-.PHONY: build install uninstall
+.PHONY: build install uninstall test
 
 build:
 	@echo "Pure Python — nothing to compile"
+
+test:
+	python -m pytest tests/ -v
 
 install:
 	install -d $(LIBDIR)/$(PYPACKAGE)
