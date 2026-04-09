@@ -1,0 +1,47 @@
+#compdef btrfs-file-history
+
+_btrfs_file_history() {
+    _arguments -C \
+        '(- *)'{-h,--help}'[Show help]' \
+        '(- *)'{-V,--version}'[Show version]' \
+        '(- *)'--no-color'[Disable colored output]' \
+        '1:command:((
+            tree\:"Show subvolume tree"
+            history\:"Show file history across snapshots"
+            diff\:"Diff a file between two snapshots"
+        ))' \
+        '*::arg:->args' \
+        && return
+
+    case $state in
+        args)
+            case ${words[1]} in
+                tree)
+                    _arguments \
+                        '--format[Output format]:format:(text dot json)' \
+                        ':mount point:_directories'
+                    ;;
+                history)
+                    _arguments \
+                        '--checksum[Compute checksums]' \
+                        '--extents[Analyze shared extents]' \
+                        '--du[Compute shared/exclusive bytes]' \
+                        '--no-tree[Suppress subvolume tree output]' \
+                        '--format[Output format]:format:(text dot json)' \
+                        '--filter[Subvolume patterns]:pattern:' \
+                        ':mount point:_directories' \
+                        ':file path:_files'
+                    ;;
+                diff)
+                    _arguments \
+                        ':mount point:_directories' \
+                        ':file path:_files' \
+                        ':old snapshot:' \
+                        ':new snapshot:'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_btrfs_file_history "$@"
